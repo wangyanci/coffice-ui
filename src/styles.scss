@@ -1,1 +1,30 @@
 /* You can add global styles to this file, and also import other style files */
+
+@import "~ng-zorro-antd/ng-zorro-antd.min.css";
+body {}
+
+// input:-webkit-autofill {
+//     -webkit-box-shadow: 0 0 0px 1000px white inset;
+// }
+// :-webkit-autofill {
+//     -webkit-text-fill-color: #fff !important;
+//     transition: background-color 5000s ease-in-out 0s;
+// }
+input {
+    background-color: rgba(255, 255, 255, 0) !important;
+}
+
+input:-webkit-autofill {
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #333 !important;
+}
+
+// .ant-message {
+//     left: 636px !important;
+// }
+.ant-message-notice {
+    text-align: right !important;
+}

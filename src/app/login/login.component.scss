@@ -1,0 +1,33 @@
+.login-page {
+    height: 100%;
+    background-image: url(../../assets/images/background.jpg);
+    background-repeat: no-repeat;
+    //background-size: 100% 100%;
+    background-position: 34% 63%;
+    -moz-background-size: 100% 100%;
+    //background: linear-gradient(to right, #fbc2eb, #a6c1ee);
+}
+
+.login-form {
+    position: relative;
+    left: 65%;
+    top: 22%;
+    // margin-top: 200px;
+    // margin-left: 800px;
+    padding: 50px 40px 20px;
+    max-width: 350px;
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+.login-form-margin {
+    margin-bottom: 16px;
+}
+
+.login-form-forgot {
+    float: right;
+}
+
+.login-form-button {
+    width: 100%;
+}

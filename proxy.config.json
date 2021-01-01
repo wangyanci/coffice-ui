@@ -1,0 +1,10 @@
+{
+    "/v1": {
+        "target": "http://localhost:9076",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true,
+        "pathRewrite": {}
+
+    }
+}
