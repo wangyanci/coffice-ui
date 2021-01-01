@@ -1,23 +1,150 @@
-.login-page {
-    height: 100%;
+section {
+    position: relative;
+    min-height: 100vh;
     background-image: url(../../assets/images/background.jpg);
     background-repeat: no-repeat;
     //background-size: 100% 100%;
     background-position: 34% 63%;
     -moz-background-size: 100% 100%;
-    //background: linear-gradient(to right, #fbc2eb, #a6c1ee);
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    padding: 20px;
+    padding-top: 7%;
 }
 
-.login-form {
+section .container {
     position: relative;
-    left: 65%;
-    top: 22%;
-    // margin-top: 200px;
+    width: 800px;
+    height: 500px;
+    background: #fff;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    left: 35%;
+}
+
+section .container .user {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+section .container .user .imgBx {
+    position: relative;
+    width: 50%;
+    height: 100%;
+    // background: #ff0;
+    transition: .5s;
+}
+
+section .container .user .imgBx img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-left: cover;
+}
+
+section .container .user .formBx {
+    position: relative;
+    width: 50%;
+    height: 100%;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 30px;
+    transition: .5s;
+    background: linear-gradient(to right, #E3FDF5, #FFE6FA);
+}
+
+section .container .user .formBx form .signup {
+    position: relative;
+    margin-top: 20px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: #555;
+    text-transform: uppercase;
+    font-weight: 300;
+}
+
+section .container .singupBx {
+    pointer-events: none;
+}
+
+section .container.active .singupBx {
+    pointer-events: initial;
+}
+
+section .container .singupBx .formBx {
+    left: 100%;
+}
+
+section .container.active .singupBx .formBx {
+    // background: linear-gradient(to right, #FFE6FA, #E3FDF5);
+    left: 0;
+}
+
+section .container .singupBx .imgBx {
+    left: -100%;
+}
+
+section .container.active .singupBx .imgBx {
+    left: 0;
+}
+
+section .container .singinBx .formBx {
+    left: 0;
+}
+
+section .container.active .singinBx .formBx {
+    left: 100%;
+}
+
+section .container .singinBx .imgBx {
+    left: 0;
+}
+
+section .container.active .singinBx .imgBx {
+    left: 100%;
+}
+
+@media (max-width: 991px) {
+    section .container {
+        max-width: 400px;
+    }
+    section .container .imgBx {
+        display: none;
+    }
+    section .container .user .formBx {
+        width: none;
+    }
+}
+
+// .login-page {
+//     height: 100%;
+//     background-image: url(../../assets/images/background.jpg);
+//     background-repeat: no-repeat;
+//     //background-size: 100% 100%;
+//     background-position: 34% 63%;
+//     -moz-background-size: 100% 100%;
+//     //background: linear-gradient(to right, #fbc2eb, #a6c1ee);
+// }
+.login-form {
+    // position: relative;
+    // left: 65%;
+    // top: 22%;
+    margin-top: 60px;
     // margin-left: 800px;
-    padding: 50px 40px 20px;
-    max-width: 350px;
-    background-color: #fff;
-    border-radius: 8px;
+    // padding: 50px 40px 20px;
+    // max-width: 350px;
+    // background-color: #fff;
+    // border-radius: 8px;
 }
 
 .login-form-margin {

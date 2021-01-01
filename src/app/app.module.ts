@@ -93,6 +93,7 @@ import { NzPipesModule } from 'ng-zorro-antd/pipes';
 import { windowProvider, WindowToken } from './shared/window';
 import { StorageProvider, StorageToken } from './shared/storage';
 import { currentDateProvider, CurrentDateToken } from './shared/current-date';
+import { LogoComponent } from './login/logo/logo.component';
 
 registerLocaleData(zh);
 
@@ -100,6 +101,7 @@ registerLocaleData(zh);
   declarations: [
     AppComponent,
     LoginComponent,
+    LogoComponent,
   ],
   imports: [
     BrowserModule,

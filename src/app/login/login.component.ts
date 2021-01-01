@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { LoginService } from "../services/login.service";
-import { Router, ActivatedRoute } from "@angular/router";
-import { Navigate } from "../models/navigate.model";
+import { LoginService } from '../services/login.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Navigate } from '../models/navigate.model';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
+  public isregist: boolean = false;
   validateForm!: FormGroup;
 
   submitForm(): void {
@@ -19,25 +20,32 @@ export class LoginComponent implements OnInit {
       this.validateForm.controls[i].updateValueAndValidity();
     }
 
-    this.loginService.dologin(this.validateForm.value).subscribe((navigate: any) => {
-      // console.log("xxxxwyc navigate:", navigate)
-      this.router.navigate(navigate.commands, navigate.extras)
-    })
+    this.loginService
+      .dologin(this.validateForm.value)
+      .subscribe((navigate: any) => {
+        // console.log("xxxxwyc navigate:", navigate)
+        this.router.navigate(navigate.commands, navigate.extras);
+      });
 
-    console.log(this.validateForm.value)
+    console.log(this.validateForm.value);
   }
 
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private loginService: LoginService,
-  ) { }
+    private loginService: LoginService
+  ) {}
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
       userName: [null, [Validators.required]],
       password: [null, [Validators.required]],
-      remember: [true]
+      remember: [true],
     });
+  }
+
+  goRegist() {
+    this.isregist = !this.isregist;
+    console.log('xxxxisregist: ', this.isregist);
   }
 }
