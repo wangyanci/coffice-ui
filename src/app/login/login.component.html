@@ -3,8 +3,10 @@
         <div class="user singinBx">
             <div class="imgBx"><img src="assets/images/p1.png" alt=""></div>
             <div class="formBx">
-                <app-logo *ngIf="!isregist"></app-logo>
-                <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+                <div class="logo">
+                    <app-logo *ngIf="!isregist"></app-logo>
+                </div>
+                <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="doLogin()">
                     <nz-form-item>
                         <nz-form-control nzErrorTip="请输入用户名或手机号!">
                             <nz-input-group nzPrefixIcon="user">
@@ -36,13 +38,23 @@
         </div>
         <div class="user singupBx">
             <div class="formBx">
-                <app-logo *ngIf="isregist"></app-logo>
-                <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+                <div class="logo">
+                    <app-logo *ngIf="isregist"></app-logo>
+                </div>
+                <form nz-form [formGroup]="validateRegisterForm" class="login-form" (ngSubmit)="doRegist()" autoComplete="off">
                     <nz-form-item>
-                        <nz-form-control nzErrorTip="请输入用户名或手机号!">
+                        <nz-form-control nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="userErrorTpl">
                             <nz-input-group nzPrefixIcon="user">
-                                <input type="text" nz-input formControlName="userName" placeholder="用户名/手机号/邮箱号" />
+                                <input type="text" nz-input formControlName="userName1" placeholder="用户名" *ngIf="isregist" />
                             </nz-input-group>
+                            <ng-template #userErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please input your username!
+                                </ng-container>
+                                <!-- <ng-container *ngIf="control.hasError('duplicated')">
+                                    The username is redundant!
+                                </ng-container> -->
+                            </ng-template>
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
@@ -52,17 +64,22 @@
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
-                    <div nz-row class="login-form-margin">
-                        <div nz-col [nzSpan]="12">
-                            <label nz-checkbox formControlName="remember">
-              <span>记住密码</span>
-            </label>
-                        </div>
-                        <div nz-col [nzSpan]="12">
-                            <a class="login-form-forgot">忘记密码？</a>
-                        </div>
-                    </div>
-                    <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">注 册</button> 马上 <a (click)="goRegist()"> 登陆! </a>
+                    <nz-form-item>
+                        <nz-form-control [nzErrorTip]="passwordErrorTpl">
+                            <nz-input-group nzPrefixIcon="lock">
+                                <input type="password" nz-input formControlName="confirmpassword" placeholder="确认密码" />
+                            </nz-input-group>
+                            <ng-template #passwordErrorTpl let-control>
+                                <ng-container *ngIf="control.hasError('required')">
+                                    Please confirm your password!
+                                </ng-container>
+                                <ng-container *ngIf="control.hasError('confirm')">
+                                    Password is inconsistent!
+                                </ng-container>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">注 册</button> 立即 <a (click)="goRegist()"> 登陆! </a>
                 </form>
             </div>
             <div class="imgBx"><img src="assets/images/p2.png" alt=""></div>

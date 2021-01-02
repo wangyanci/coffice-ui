@@ -18,7 +18,7 @@ section .container {
     width: 800px;
     height: 500px;
     background: #fff;
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
     overflow: hidden;
     left: 35%;
 }
@@ -157,4 +157,28 @@ section .container.active .singinBx .imgBx {
 
 .login-form-button {
     width: 100%;
+}
+
+section .container .singinBx .imgBx img::after {
+    content: "";
+    background-image: inherit;
+    width: inherit;
+    height: 40%;
+    // position: relative;
+    position: absolute;
+    bottom: -60%;
+    transform: scaleY(-1);
+    background-position: bottom;
+    background-size: cover;
+}
+
+section .container {
+    -webkit-box-reflect: below 0 -webkit-linear-gradient(top, rgba(250, 250, 250, 0), rgba(250, 250, 250, .0) 75%, rgba(250, 250, 250, 0.3));
+    box-reflect: below 0 -webkit-linear-gradient(top, rgba(250, 250, 250, 0), rgba(250, 250, 250, .0) 75%, rgba(250, 250, 250, 0.3));
+    // -webkit-transform: rotate(5deg);
+}
+
+.logo {
+    width: 200px;
+    height: 120px;
 }

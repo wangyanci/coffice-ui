@@ -1,11 +1,13 @@
 import { Injectable, Inject } from '@angular/core';
 import {
+  HttpParams,
   HttpRequest,
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
   HttpResponse,
   HttpErrorResponse,
+  HttpHeaders,
 } from '@angular/common/http';
 // import {Observable} from 'rxjs/Observable';
 // import {ErrorObservable} from 'rxjs/observable/ErrorObservable';
@@ -40,6 +42,26 @@ export class CommonInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
+    console.log('aaarequest: XXX', request);
+
+    let url: string = request.url;
+    let params: HttpParams = request.params;
+    let headers: HttpHeaders = request.headers;
+
+    //将url中路径参数替换成参数map中的值并将替换的参数从原参数map中移除
+    params
+      .keys()
+      .filter(
+        (value: string): boolean =>
+          value.startsWith(':') && url.indexOf(value) != -1
+      )
+      .forEach((value: string) => {
+        if (params.get(value)) {
+          url = url.replace(value, <string>params.get(value));
+          params = params.delete(value);
+        }
+      });
+
     const needToken = INGOREAUTHORIZATION.filter((u) => request.url.match(u));
     console.log('needToken: ', needToken);
     if (!needToken.length) {
@@ -47,13 +69,6 @@ export class CommonInterceptor implements HttpInterceptor {
         STORAG.TOKEN_STORAGE_NAMESPACE
       );
       if (!token) {
-        // if (token) {
-
-        // console.log("this.router: ", this.router)
-        // console.log("this.activeRouter: ", this.activeRouter)
-
-        // console.log("111this.loginService.navigateSubject: ", this.loginService.navigateSubject.value)
-
         this.loginService.navigateSubject.next({
           commands: [this.router.routerState.snapshot.url],
           extras: this.activeRouter.snapshot,
@@ -66,11 +81,20 @@ export class CommonInterceptor implements HttpInterceptor {
         return EMPTY;
       }
 
-      request = request.clone({
-        headers: request.headers.set(AUTHHEADER, <string>token),
-      });
+      headers = headers.set(AUTHHEADER, <string>token);
       //token ? request.headers.set(AUTHHEADER, <string>token):null;
     }
+
+    if (!headers.get('Content-Type')) {
+      headers = headers.set('Content-Type', 'application/json');
+      console.log('kkkkk headers: ', headers);
+    }
+
+    request = request.clone({
+      url: url,
+      params: params,
+      headers: headers,
+    });
 
     return next.handle(request).pipe(
       tap(
@@ -113,6 +137,8 @@ export class CommonInterceptor implements HttpInterceptor {
             //   console.log(error.error.message ? error.error.message : error.message)
             //   this.message.error('出错拉~, 网络请求错误,请刷新页面试一试');
           }
+
+          // throwError(error);
         }
       )
     );
