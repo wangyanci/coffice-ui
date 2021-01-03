@@ -8,7 +8,7 @@
                 </div>
                 <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="doLogin()">
                     <nz-form-item>
-                        <nz-form-control nzErrorTip="请输入用户名或手机号!">
+                        <nz-form-control [nzErrorTip]="userErrorTpl">
                             <nz-input-group nzPrefixIcon="user">
                                 <input type="text" nz-input formControlName="userName" placeholder="用户名/手机号/邮箱号" />
                             </nz-input-group>
@@ -41,15 +41,18 @@
                 <div class="logo">
                     <app-logo *ngIf="isregist"></app-logo>
                 </div>
-                <form nz-form [formGroup]="validateRegisterForm" class="login-form" (ngSubmit)="doRegist()" autoComplete="off">
+                <form nz-form [formGroup]="validateRegisterForm" class="login-form" (ngSubmit)="doRegist()" autoComplete="nimabi">
                     <nz-form-item>
-                        <nz-form-control nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="userErrorTpl">
-                            <nz-input-group nzPrefixIcon="user">
-                                <input type="text" nz-input formControlName="userName1" placeholder="用户名" *ngIf="isregist" />
+                        <nz-form-control nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="userErrorTpl" autoComplete="nimabi">
+                            <nz-input-group nzPrefixIcon="user" autoComplete="nimabi">
+                                <input type="text" nz-input formControlName="userName1" placeholder="用户名" autoComplete="nimabi" [readonly]="!isregist?'readonly':''" />
                             </nz-input-group>
                             <ng-template #userErrorTpl let-control>
                                 <ng-container *ngIf="control.hasError('required')">
                                     Please input your username!
+                                </ng-container>
+                                <ng-container *ngIf="control.hasError('pattern')">
+                                    Please input vaild username!
                                 </ng-container>
                                 <!-- <ng-container *ngIf="control.hasError('duplicated')">
                                     The username is redundant!

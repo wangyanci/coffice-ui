@@ -36,6 +36,9 @@ export class LoginComponent implements OnInit {
           null,
           [
             Validators.required,
+            Validators.pattern(
+              /^(?!_)(?!.*?_$)(?!\d)[a-zA-Z0-9_\u4e00-\u9fa5]+$/
+            ),
             // Validators.maxLength(12),
             // Validators.minLength(6),
           ],
@@ -56,6 +59,9 @@ export class LoginComponent implements OnInit {
             Validators.required,
             // Validators.maxLength(12),
             // Validators.minLength(6),
+            Validators.pattern(
+              /^(?!_)(?!.*?_$)(?!\d)[a-zA-Z0-9_\u4e00-\u9fa5]+$/
+            ),
           ],
         ],
         password: [null, [Validators.required]],
@@ -64,10 +70,6 @@ export class LoginComponent implements OnInit {
       // { updateOn: 'blur' }
       { updateOn: 'change' }
     );
-
-    // this.validateRegisterForm.patchValue({
-    //   userName: null,
-    // });
   }
 
   doLogin(): void {
@@ -76,12 +78,6 @@ export class LoginComponent implements OnInit {
       this.validateForm.controls[i].markAsDirty();
       this.validateForm.controls[i].updateValueAndValidity();
     }
-
-    // for (const i in this.validateRegisterForm.controls) {
-    //   // console.log('xxxx controls: ', this.validateForm.controls[i]);
-    //   this.validateRegisterForm.controls[i].markAsDirty();
-    //   this.validateRegisterForm.controls[i].updateValueAndValidity();
-    // }
 
     this.loginService
       .dologin(this.validateForm.value)
@@ -110,31 +106,9 @@ export class LoginComponent implements OnInit {
   }
 
   goRegist() {
-    if (!this.isregist) {
-      for (const i in this.validateRegisterForm.controls) {
-        // console.log('xxxx controls: ', this.validateForm.controls[i]);
-        // this.validateRegisterForm.controls[i].markAsPristine;
-        this.validateRegisterForm.controls[i].updateValueAndValidity();
-      }
-    }
+    this.validateRegisterForm.reset();
     this.isregist = !this.isregist;
   }
-
-  // userNameAsyncValidator = (control: FormControl) =>
-  //   this.loginService.isUerNameExist(control.value).pipe(
-  //     switchMap((resp: any): any => {
-  //       console.log('MMMMresp:  ', resp);
-  //       of({ error: false });
-  //     }),
-  //     catchError((error: any): any => {
-  //       console.log('MMMMerror:  ', error);
-
-  //       throwError({
-  //         error: true,
-  //         duplicated: true,
-  //       });
-  //     })
-  //   );
 
   userNameAsyncValidator = (
     control: FormControl
@@ -155,7 +129,9 @@ export class LoginComponent implements OnInit {
   confirmValidator = (control: FormControl): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
-    } else if (control.value !== this.validateForm.controls.password.value) {
+    } else if (
+      control.value !== this.validateRegisterForm.controls.password.value
+    ) {
       return { confirm: true, error: true };
     }
     return {};
