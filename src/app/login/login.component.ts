@@ -12,6 +12,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Navigate } from '../models/navigate.model';
 import { Observable, Observer, of, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { ERRMSG, ERRCODE, InfoCode, INFO } from '../constant/error.constant';
+import { HttpStatusCode } from '../constant/http.constant';
 
 @Component({
   selector: 'app-login',
@@ -26,13 +29,14 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     private fb: FormBuilder,
+    private message: NzMessageService,
     private loginService: LoginService
   ) {}
 
   ngOnInit(): void {
     this.validateRegisterForm = this.fb.group(
       {
-        userName1: [
+        userName: [
           null,
           [
             Validators.required,
@@ -72,35 +76,53 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  doLogin(): void {
-    for (const i in this.validateForm.controls) {
-      // console.log('xxxx controls: ', this.validateForm.controls[i]);
-      this.validateForm.controls[i].markAsDirty();
-      this.validateForm.controls[i].updateValueAndValidity();
-    }
+  doRegist(): void {
+    // for (const i in this.validateRegisterForm.controls) {
+    //   // console.log('xxxx controls: ', this.validateForm.controls[i]);
+    //   this.validateRegisterForm.controls[i].markAsDirty();
+    //   this.validateRegisterForm.controls[i].updateValueAndValidity();
+    // }
+    // console.log('ggggllll: ', this.validateRegisterForm.status);
+
+    // if (this.validateRegisterForm.statusChanges.subscribe != 'VALID') {
+    //   return;
+    // }
+
+    // console.log('pppllll: ', this.validateRegisterForm.status);
 
     this.loginService
-      .dologin(this.validateForm.value)
-      .subscribe((navigate: any) => {
-        // console.log("xxxxwyc navigate:", navigate)
-        this.router.navigate(navigate.commands, navigate.extras);
+      .doRegist(this.validateRegisterForm.value)
+      .subscribe((resp: any) => {
+        if (resp.status == HttpStatusCode.StatusCreated) {
+          this.validateForm.setValue({
+            userName: this.validateRegisterForm.value.userName,
+            password: this.validateRegisterForm.value.password,
+            remember: true,
+          });
+          this.message.success(INFO[InfoCode.WEB_REGIST_SUCCESS]);
+          this.goRegist();
+        }
+        console.log('respxxx: ', resp);
       });
-
-    console.log(this.validateForm.value);
   }
-
-  doRegist() {
+  doLogin(): void {
     // for (const i in this.validateForm.controls) {
+    //   // console.log('xxxx controls: ', this.validateForm.controls[i]);
     //   this.validateForm.controls[i].markAsDirty();
     //   this.validateForm.controls[i].updateValueAndValidity();
     // }
 
-    // this.loginService
-    //   .dologin(this.validateForm.value)
-    //   .subscribe((navigate: any) => {
-    //     // console.log("xxxxwyc navigate:", navigate)
-    //     this.router.navigate(navigate.commands, navigate.extras);
-    //   });
+    // if (this.validateForm.status != 'VALID') {
+    //   return;
+    // }
+
+    this.loginService
+      .doLogin(this.validateForm.value)
+      .subscribe((navigate: any) => {
+        // console.log("xxxxwyc navigate:", navigate)
+        this.message.success(INFO[InfoCode.WEB_LOGIN_SUCCESS]);
+        this.router.navigate(navigate.commands, navigate.extras);
+      });
 
     console.log(this.validateForm.value);
   }
@@ -116,11 +138,12 @@ export class LoginComponent implements OnInit {
     new Observable((observer: Observer<ValidationErrors | null>) => {
       this.loginService.isUerNameExist(control.value).subscribe(
         (resp: any): any => {
-          observer.next(null);
+          this.message.error(ERRMSG[ERRCODE.K4S_USER_IS_EXIST]);
+          observer.next({ error: true, duplicated: true });
           observer.complete();
         },
         (error: any) => {
-          observer.next({ error: true, duplicated: true });
+          observer.next(null);
           observer.complete();
         }
       );

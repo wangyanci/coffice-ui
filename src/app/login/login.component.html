@@ -45,7 +45,7 @@
                     <nz-form-item>
                         <nz-form-control nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="userErrorTpl" autoComplete="nimabi">
                             <nz-input-group nzPrefixIcon="user" autoComplete="nimabi">
-                                <input type="text" nz-input formControlName="userName1" placeholder="用户名" autoComplete="nimabi" [readonly]="!isregist?'readonly':''" />
+                                <input type="text" nz-input formControlName="userName" placeholder="用户名" autoComplete="nimabi" [readonly]="!isregist?'readonly':''" />
                             </nz-input-group>
                             <ng-template #userErrorTpl let-control>
                                 <ng-container *ngIf="control.hasError('required')">

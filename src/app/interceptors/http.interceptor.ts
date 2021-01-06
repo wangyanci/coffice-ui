@@ -44,6 +44,7 @@ export class CommonInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<unknown>> {
     console.log('aaarequest: XXX', request);
 
+    let alert: boolean = true;
     let url: string = request.url;
     let params: HttpParams = request.params;
     let headers: HttpHeaders = request.headers;
@@ -61,6 +62,13 @@ export class CommonInterceptor implements HttpInterceptor {
           params = params.delete(value);
         }
       });
+
+    if (params.get(':alert') == 'false') {
+      alert = false;
+      params = params.delete(':alert');
+    }
+
+    console.log('kkkkk: ', alert);
 
     const needToken = INGOREAUTHORIZATION.filter((u) => request.url.match(u));
     console.log('needToken: ', needToken);
@@ -109,35 +117,28 @@ export class CommonInterceptor implements HttpInterceptor {
           // console.log('event not HttpResponse: ', event.body);
         },
         (error: any) => {
-          // 统一处理所有的http错误
-          if (error.status == HttpStatusCode.StatusUnauthorized) {
-            this.router.navigate([API.WEB_LOGIN]);
-            // this.router.navigate([API.WEB_USER]);
-          } else if (error.status == HttpStatusCode.StatusGatewayTimeout) {
-            this.message.error(ERRMSG[ERRCODE.WEB_NETWORK_ERROR]);
-          } else if (
-            error.status >= HttpStatusCode.StatusBadRequest &&
-            error.status < HttpStatusCode.StatusUnparseableResponseHeaders
-          ) {
-            console.log('xxxxoooo: ', error);
-            this.message.error(
-              ERRMSG[error.error.code]
-                ? ERRMSG[error.error.code]
-                : error.error.message
-              // {
-              //   nzDuration: 1000,
-              // }
-            );
-          } else {
-            // this.message.create('warning', error.error['message']);
-            this.message.error(
-              error.error.message ? error.error.message : error.message
-            );
-            // } else {
-            //   console.log(error.error.message ? error.error.message : error.message)
-            //   this.message.error('出错拉~, 网络请求错误,请刷新页面试一试');
+          switch (true) {
+            case !alert:
+              break;
+            case error.status == HttpStatusCode.StatusUnauthorized:
+              this.router.navigate([API.WEB_LOGIN]);
+              break;
+            case error.status == HttpStatusCode.StatusGatewayTimeout:
+              this.message.error(ERRMSG[ERRCODE.WEB_REQUEST_FAILD]);
+              break;
+            case error.status >= HttpStatusCode.StatusBadRequest &&
+              error.status < HttpStatusCode.StatusUnparseableResponseHeaders:
+              this.message.error(
+                ERRMSG[error.error.code]
+                  ? ERRMSG[error.error.code]
+                  : error.error.message
+              );
+              break;
+            default:
+              this.message.error(
+                error.error.message ? error.error.message : error.message
+              );
           }
-
           // throwError(error);
         }
       )

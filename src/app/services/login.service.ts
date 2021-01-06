@@ -15,6 +15,8 @@ import { API, AUTHHEADER } from '../constant/api.constant';
 import { ModelUtil } from '../utils/model.util';
 import { Navigate } from '../models/navigate.model';
 
+import { Base64 } from 'js-base64/base64';
+
 // type Filter<T, U> = T extends U ? T: never;
 
 @Injectable({
@@ -35,7 +37,7 @@ export class LoginService {
     // this.navigateSubject.value
   }
 
-  dologin(user: UserInfo): Observable<Object> {
+  doLogin(user: UserInfo): Observable<Object> {
     // this.http.post()
     // var { remember, ...user1 } = user
     // console.log("user1: ", user1)
@@ -64,6 +66,9 @@ export class LoginService {
       .pipe(
         tap((resp: any) => {
           console.log('xxxxx resp: ');
+          let aaa: string = resp.headers.get(AUTHHEADER);
+          let bbb: string[] = aaa.split('.');
+          console.log('user info ftom token: ', Base64.decode(bbb[1]));
           this.storage.setItem(
             STORAG.TOKEN_STORAGE_NAMESPACE,
             resp.headers.get(AUTHHEADER)
@@ -74,11 +79,25 @@ export class LoginService {
       );
   }
 
-  dologout() {}
+  doRegist(user: UserInfo): Observable<Object> {
+    let { userName, password } = user;
+    user = { userName, password };
+
+    console.log('yyyhahhah');
+    // this.storage.setItem(STORAG.TOKEN_STORAGE_NAMESPACE, JSON.stringify(user))
+    return this.http.post(API.APISERVER_USER_CREATE, user, {
+      observe: 'response',
+    });
+  }
+
+  doLogout() {}
 
   isUerNameExist(userName: string): Observable<Object> {
     return this.http.get(API.APISERVER_USERNAME_IS_EXIST, {
-      params: { ':name': userName },
+      params: {
+        ':name': userName,
+        ':alert': 'false',
+      },
       observe: 'response',
     });
   }
